@@ -18,19 +18,19 @@ public class JoinLeaveListener implements Listener
             return;
         }
 
-        event.setJoinMessage( ChatColor.YELLOW + "+ " + ChatColor.GRAY + event.getPlayer().getDisplayName() );
+        event.setJoinMessage( ChatColor.YELLOW + "+ " + ChatColor.GRAY + event.getPlayer().getName() );
 
         //MOTD
         player.sendMessage( "" );
-        player.sendMessage( "§b§m---------------------------------------------------" ); //Strike
-        player.sendMessage( "§eHello §f" + player.getDisplayName() + "§e, Welcome to Loy Hub!" );
-        player.sendMessage( "§b§m---------------------------------------------------" ); //Strike
+        player.sendMessage( "§7§m---------------------------------------------------" ); //Strike
+        player.sendMessage( "§fHello §c" + player.getDisplayName() + "§f, Welcome to Loy Hub!" );
+        player.sendMessage( "§7§m---------------------------------------------------" ); //Strike
         player.sendMessage( "" );
     }
 
     @EventHandler
     public void onLeave( PlayerQuitEvent event )
     {
-        event.setQuitMessage( ChatColor.RED + "- " + ChatColor.GRAY + event.getPlayer().getDisplayName() );
+        event.setQuitMessage( ChatColor.RED + "- " + ChatColor.GRAY + event.getPlayer().getName() );
     }
 }
