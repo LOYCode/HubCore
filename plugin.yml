@@ -1,0 +1,32 @@
+name: HubCore
+main: io.loyloy.hubcore.HubCore
+version: 1.0
+author: Melonking
+description: Needed things for Loy Hub
+depend: [Vault]
+
+commands:
+  hug:
+    description: Hug someone!
+  announce:
+    description: Announce stuff!
+    aliases: [anc]
+  alert:
+    description: Alert stuff!
+    aliases: [news]
+  giveeveryone:
+    description: Give something to everyone!
+  mollytalk:
+    description: Talk as Molly!
+    aliases: [mt]
+  playertalk:
+    description: Talk as someone!
+    aliases: [pt]
+  fly:
+    description: Fly!
+  chat:
+    description: Loy chat commands!
+    aliases: [c,ch]
+  emeralds:
+    description: Get your emerald balance!
+    aliases: [money,fe,bal]

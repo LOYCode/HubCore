@@ -1,0 +1,10 @@
+#Loy Hub Config
+announcements:
+- 'Thank you for visiting Loy Hub'
+- 'Please enjoy one of the many servers avalable.'
+- 'We hope you are having a pleasent stay.'
+- 'Flights for MEC-Paris will be departing from Gate 23.'
+replies:
+- Hammer Time!=stop
+- http://forum.loyloy.io=forum+link
+- http://loyloy.wikia.com/wiki/LoyLoy_Wiki=wiki+link
