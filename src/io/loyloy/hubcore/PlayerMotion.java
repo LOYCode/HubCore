@@ -25,6 +25,7 @@ public class PlayerMotion {
                     Location feet = player.getLocation();
                     Material gravel = world.getBlockAt(new Location(world, feet.getX(), feet.getY()-1, feet.getZ())).getType();
                     if (gravel==Material.GRAVEL) {
+                        player.addPotionEffect(PotionEffectType.SPEED.createEffect((int) 60L, 1), true);
                     }
                 }
             }
