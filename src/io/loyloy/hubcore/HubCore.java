@@ -19,6 +19,8 @@ public class HubCore extends JavaPlugin
     public static Permission permission = null;
     public static Chat chat = null;
 
+    public static PlayerMotion plyMotionHandler;
+
     private static final String PREFIX = ChatColor.YELLOW + "[Loy]" + ChatColor.GREEN + " ";
     private static final String MOLLY = ChatColor.GRAY + "Server " + ChatColor.AQUA + "Molly" + ChatColor.WHITE + " ";
 
@@ -52,6 +54,10 @@ public class HubCore extends JavaPlugin
         getCommand( "chat" ).setExecutor( new ChatCommand( channelStore ) );
         getCommand( "playertalk" ).setExecutor( new PlayerTalkCommand( chatListener ) );
 
+        //Player Stuff
+        plyMotionHandler = new PlayerMotion(this);
+        plyMotionHandler.pluginEnabled();
+
         // Announcements
         if( getConfig().getStringList( "announcements" ).size() >= 2 )
         {
@@ -61,6 +67,12 @@ public class HubCore extends JavaPlugin
         {
             getLogger().info( "Please enter at least 2 announcements for announcements to enable!" );
         }
+    }
+
+    @Override
+    public void onDisable()
+    {
+        plyMotionHandler.pluginDisabled();
     }
 
     public static String getPfx() { return PREFIX; }
