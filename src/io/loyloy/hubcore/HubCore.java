@@ -9,10 +9,16 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 public class HubCore extends JavaPlugin
 {
@@ -44,7 +50,7 @@ public class HubCore extends JavaPlugin
         getCommand( "mollytalk" ).setExecutor( new MollyTalkCommand() );
 
         //Misc
-        pm.registerEvents( new JoinLeaveListener(), this );
+        pm.registerEvents( new JoinLeaveListener(setupSpawns(getConfig().getConfigurationSection("spawns"))), this );
 
         //Loy Chat module
         ChannelStore channelStore = new ChannelStore();
@@ -96,5 +102,29 @@ public class HubCore extends JavaPlugin
         }
 
         return (chat != null);
+    }
+
+    private HashMap<String, Location> setupSpawns(ConfigurationSection s) {
+        HashMap<String, Location> spawns = new HashMap<String,Location>();
+
+        Set<String> keys = s.getKeys(false);
+        if (keys!=null)
+        for(String key: keys) {
+            ConfigurationSection spawnsection = (ConfigurationSection) s.get(key);
+
+            Location loc = new Location(
+                    Bukkit.getServer().getWorlds().get(0),
+                    spawnsection.getDouble("x"),
+                    spawnsection.getDouble("y"),
+                    spawnsection.getDouble("z")
+            );
+            loc.setPitch((float) spawnsection.getDouble("pitch"));
+            loc.setYaw((float) spawnsection.getDouble("yaw"));
+
+            List<String> addresses = spawnsection.getStringList("addresses");
+            for(String addr: addresses)
+                spawns.put(addr, loc);
+        }
+        return spawns;
     }
 }
