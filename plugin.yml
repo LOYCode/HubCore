@@ -30,3 +30,5 @@ commands:
   emeralds:
     description: Get your emerald balance!
     aliases: [money,fe,bal]
+  setpspawn:
+    description: Set server spawns

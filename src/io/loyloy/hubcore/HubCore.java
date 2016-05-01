@@ -26,6 +26,7 @@ public class HubCore extends JavaPlugin
     public static Chat chat = null;
 
     public static PlayerMotion plyMotionHandler;
+    public JoinLeaveListener joinLeaveListener;
 
     private static final String PREFIX = ChatColor.YELLOW + "[Loy]" + ChatColor.GREEN + " ";
     private static final String MOLLY = ChatColor.GRAY + "Server " + ChatColor.AQUA + "Molly" + ChatColor.WHITE + " ";
@@ -48,9 +49,11 @@ public class HubCore extends JavaPlugin
         getCommand( "giveeveryone" ).setExecutor( new GiveEveryoneCommand() );
         getCommand( "hug" ).setExecutor( new HugCommand() );
         getCommand( "mollytalk" ).setExecutor( new MollyTalkCommand() );
+        getCommand( "setpspawn" ).setExecutor( new PSpawnsCommand(this) );
 
         //Misc
-        pm.registerEvents( new JoinLeaveListener(setupSpawns(getConfig().getConfigurationSection("spawns"))), this );
+        joinLeaveListener = new JoinLeaveListener(setupSpawns(getConfig().getConfigurationSection("spawns")));
+        pm.registerEvents( joinLeaveListener, this );
 
         //Loy Chat module
         ChannelStore channelStore = new ChannelStore();
@@ -104,7 +107,7 @@ public class HubCore extends JavaPlugin
         return (chat != null);
     }
 
-    private HashMap<String, Location> setupSpawns(ConfigurationSection s) {
+    public HashMap<String, Location> setupSpawns(ConfigurationSection s) {
         HashMap<String, Location> spawns = new HashMap<String,Location>();
 
         Set<String> keys = s.getKeys(false);

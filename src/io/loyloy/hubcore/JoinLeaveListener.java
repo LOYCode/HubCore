@@ -21,6 +21,10 @@ public class JoinLeaveListener implements Listener
         this.waits = new HashMap<Player, Location>();
     }
 
+    public void setSpawns(HashMap<String, Location> spawns) {
+        this.spawns = spawns;
+    }
+
     @EventHandler
     public void onJoin( PlayerJoinEvent event )
     {
