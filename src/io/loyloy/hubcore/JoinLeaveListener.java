@@ -16,9 +16,10 @@ public class JoinLeaveListener implements Listener
     private HashMap<String, Location> spawns;
     private HashMap<Player, Location> waits;
 
-    public JoinLeaveListener(HashMap<String, Location> spawns) {
+    public JoinLeaveListener(HashMap<String, Location> spawns)
+    {
         this.spawns = spawns;
-        this.waits = new HashMap<Player, Location>();
+        this.waits = new HashMap<>();
     }
 
     public void setSpawns(HashMap<String, Location> spawns) {
@@ -43,7 +44,8 @@ public class JoinLeaveListener implements Listener
         player.sendMessage( "§7§m---------------------------------------------------" ); //Strike
         player.sendMessage( "" );
 
-        if(waits.get(player)!=null) {
+        if( waits.get(player) != null )
+        {
             player.teleport(waits.get(player));
             waits.remove(player);
         }
@@ -56,9 +58,12 @@ public class JoinLeaveListener implements Listener
     }
 
     @EventHandler
-    public void onLogin(PlayerLoginEvent event ) {
+    public void onLogin(PlayerLoginEvent event )
+    {
         Location l = spawns.get(event.getHostname());
-        if(l!=null)
-            waits.put(event.getPlayer(), l);
+        if( l != null )
+        {
+            waits.put( event.getPlayer(), l );
+        }
     }
 }

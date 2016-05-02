@@ -54,6 +54,7 @@ public class HubCore extends JavaPlugin
         //Misc
         joinLeaveListener = new JoinLeaveListener(setupSpawns(getConfig().getConfigurationSection("spawns")));
         pm.registerEvents( joinLeaveListener, this );
+        pm.registerEvents( new CompassListener(), this );
 
         //Loy Chat module
         ChannelStore channelStore = new ChannelStore();
