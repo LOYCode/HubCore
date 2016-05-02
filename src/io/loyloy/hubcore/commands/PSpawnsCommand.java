@@ -1,6 +1,8 @@
 package io.loyloy.hubcore.commands;
 
 import io.loyloy.hubcore.HubCore;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -95,16 +97,34 @@ public class PSpawnsCommand implements CommandExecutor {
                     msg = msg.substring(0,msg.length()-2);
                     player.sendMessage(msg);
                     break;
+                case "teleport":
+                    if(args.length!=2)
+                        return false;
+                    if(!spawns.contains(args[1])) {
+                        player.sendMessage("No server with name \""+args[1]+"\", have you created it?");
+                        return true;
+                    }
+                    ConfigurationSection tpspawnp = spawns.getConfigurationSection(args[1]);
+                    Location tploc = new Location(
+                            Bukkit.getServer().getWorlds().get(0),
+                            tpspawnp.getDouble("x"),
+                            tpspawnp.getDouble("y"),
+                            tpspawnp.getDouble("z"),
+                            (float) tpspawnp.getDouble("yaw"),
+                            (float) tpspawnp.getDouble("pitch")
+                    );
+                    player.teleport(tploc);
+                    break;
                 case "address": //setpspawn address [name] ...
+                    if(args.length>1 && !spawns.contains(args[1])) {
+                        player.sendMessage("No server with name \""+args[1]+"\", have you created it?");
+                        return true;
+                    }
                     if(args.length<3) {
                         player.sendMessage("Available sub-options:");
                         player.sendMessage(" /setpspawn address [name] add [address]");
                         player.sendMessage(" /setpspawn address [name] remove [address]");
                         player.sendMessage(" /setpspawn address [name] list");
-                        return true;
-                    }
-                    if(!spawns.contains(args[1])) {
-                        player.sendMessage("No server with name \""+args[1]+"\", have you created it?");
                         return true;
                     }
                     ConfigurationSection addrspawns = spawns.getConfigurationSection(args[1]);
@@ -113,6 +133,8 @@ public class PSpawnsCommand implements CommandExecutor {
                         case "add": //setpspawn address [name] add [address]
                             if(args.length!=4)
                                 return false;
+                            if(!args[3].contains(":"))
+                                args[3] = args[3]+":25565";
                             if(addresses.contains(args[3])) {
                                 player.sendMessage("Address is already set for that server");
                                 return true;
@@ -123,6 +145,8 @@ public class PSpawnsCommand implements CommandExecutor {
                         case "remove": //setpspawn address [name] remove [address]
                             if(args.length!=4)
                                 return false;
+                            if(!args[3].contains(":"))
+                                args[3] = args[3]+":25565";
                             if(!addresses.contains(args[3])) {
                                 player.sendMessage("Address isn't set for that server");
                                 return true;
@@ -161,7 +185,7 @@ public class PSpawnsCommand implements CommandExecutor {
             plugin.saveConfig();
             plugin.joinLeaveListener.setSpawns(plugin.setupSpawns(spawns));
         } else {
-            player.sendMessage("You don't have permission to do that.");
+            player.sendMessage( HubCore.getPfx() + ChatColor.RED + "Sorry no permission!" );
         }
         return true;
     }

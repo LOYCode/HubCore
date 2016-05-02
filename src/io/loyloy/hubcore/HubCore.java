@@ -120,10 +120,10 @@ public class HubCore extends JavaPlugin
                     Bukkit.getServer().getWorlds().get(0),
                     spawnsection.getDouble("x"),
                     spawnsection.getDouble("y"),
-                    spawnsection.getDouble("z")
+                    spawnsection.getDouble("z"),
+                    (float) spawnsection.getDouble("yaw"),
+                    (float) spawnsection.getDouble("pitch")
             );
-            loc.setPitch((float) spawnsection.getDouble("pitch"));
-            loc.setYaw((float) spawnsection.getDouble("yaw"));
 
             List<String> addresses = spawnsection.getStringList("addresses");
             for(String addr: addresses)
