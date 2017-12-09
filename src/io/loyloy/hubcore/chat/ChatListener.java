@@ -1,6 +1,5 @@
 package io.loyloy.hubcore.chat;
 
-import io.loyloy.hubcore.EmeraldEcon;
 import io.loyloy.hubcore.HubCore;
 import net.md_5.bungee.api.chat.*;
 import net.milkbowl.vault.chat.Chat;
@@ -64,7 +63,6 @@ public class ChatListener implements Listener
         //Name Tooltip
         String nameToolTip = "";
         nameToolTip += ChatColor.RED + "Rank " + ChatColor.GRAY + group;
-        nameToolTip += "\n" + ChatColor.GREEN + "Emeralds " + ChatColor.GRAY + EmeraldEcon.getBalance( p );
         nameToolTip += "\n" + ChatColor.WHITE + "Name " + ChatColor.GRAY + p.getName();
 
         if( p.hasPermission( "loy.chat.color" ) )

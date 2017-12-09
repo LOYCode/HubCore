@@ -9,27 +9,20 @@ import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
 
 public class HubCore extends JavaPlugin
 {
     public static Permission permission = null;
     public static Chat chat = null;
 
-    public static PlayerMotion plyMotionHandler;
     public JoinLeaveListener joinLeaveListener;
 
     private static final String PREFIX = ChatColor.YELLOW + "[Loy]" + ChatColor.GREEN + " ";
-    private static final String MOLLY = ChatColor.GRAY + "Server " + ChatColor.AQUA + "Molly" + ChatColor.WHITE + " ";
+    private static final String MOLLY = ChatColor.GRAY + "Server " + ChatColor.AQUA + "LOYLOY" + ChatColor.WHITE + " ";
 
     @Override
     public void onEnable()
@@ -42,57 +35,50 @@ public class HubCore extends JavaPlugin
         BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
         PluginManager pm = getServer().getPluginManager();
 
-        getCommand( "alert" ).setExecutor( new AlertCommand() );
-        getCommand( "announce" ).setExecutor( new AnnounceCommand( this ) );
-        getCommand( "emeralds" ).setExecutor( new EmeraldsCommand() );
-        getCommand( "fly" ).setExecutor( new FlyCommand() );
-        getCommand( "giveeveryone" ).setExecutor( new GiveEveryoneCommand() );
-        getCommand( "hug" ).setExecutor( new HugCommand() );
-        getCommand( "mollytalk" ).setExecutor( new MollyTalkCommand() );
-        getCommand( "setpspawn" ).setExecutor( new PSpawnsCommand(this) );
+        getCommand("alert").setExecutor(new AlertCommand());
+        getCommand("announce").setExecutor(new AnnounceCommand(this));
+        getCommand("fly").setExecutor(new FlyCommand());
+        getCommand("giveeveryone").setExecutor(new GiveEveryoneCommand());
+        getCommand("hug").setExecutor(new HugCommand());
+        getCommand("mollytalk").setExecutor(new MollyTalkCommand());
 
         //Misc
-        joinLeaveListener = new JoinLeaveListener(setupSpawns(getConfig().getConfigurationSection("spawns")));
-        pm.registerEvents( joinLeaveListener, this );
-        pm.registerEvents( new CompassListener(), this );
+        pm.registerEvents(new JoinLeaveListener(), this);
+        pm.registerEvents(new CompassListener(), this);
 
         //Loy Chat module
         ChannelStore channelStore = new ChannelStore();
-        ChatListener chatListener = new ChatListener( channelStore );
-        pm.registerEvents( chatListener, this );
-        pm.registerEvents( new MollyChat( this, channelStore ), this );
-        getCommand( "chat" ).setExecutor( new ChatCommand( channelStore ) );
-        getCommand( "playertalk" ).setExecutor( new PlayerTalkCommand( chatListener ) );
-
-        //Player Stuff
-        plyMotionHandler = new PlayerMotion(this);
-        plyMotionHandler.pluginEnabled();
+        ChatListener chatListener = new ChatListener(channelStore);
+        pm.registerEvents(chatListener, this);
+        pm.registerEvents(new MollyChat(this, channelStore), this);
+        getCommand("chat").setExecutor(new ChatCommand(channelStore));
+        getCommand("playertalk").setExecutor(new PlayerTalkCommand(chatListener));
 
         // Announcements
-        if( getConfig().getStringList( "announcements" ).size() >= 2 )
+        if( getConfig().getStringList("announcements").size() >= 2 )
         {
-            scheduler.scheduleSyncRepeatingTask( this, new AnnounceRunnable( this ), 3600, 3600 );
-        }
-        else
+            scheduler.scheduleSyncRepeatingTask(this, new AnnounceRunnable(this), 3600, 3600);
+        } else
         {
-            getLogger().info( "Please enter at least 2 announcements for announcements to enable!" );
+            getLogger().info("Please enter at least 2 announcements for announcements to enable!");
         }
     }
 
-    @Override
-    public void onDisable()
+    public static String getPfx()
     {
-        plyMotionHandler.pluginDisabled();
+        return PREFIX;
     }
 
-    public static String getPfx() { return PREFIX; }
-
-    public static String getMol() { return MOLLY; }
+    public static String getMol()
+    {
+        return MOLLY;
+    }
 
     private boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
+        if( permissionProvider != null )
+        {
             permission = permissionProvider.getProvider();
         }
         return (permission != null);
@@ -101,34 +87,11 @@ public class HubCore extends JavaPlugin
     private boolean setupChat()
     {
         RegisteredServiceProvider<Chat> chatProvider = getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null) {
+        if( chatProvider != null )
+        {
             chat = chatProvider.getProvider();
         }
 
         return (chat != null);
-    }
-
-    public HashMap<String, Location> setupSpawns(ConfigurationSection s) {
-        HashMap<String, Location> spawns = new HashMap<String,Location>();
-
-        Set<String> keys = s.getKeys(false);
-        if (keys!=null)
-        for(String key: keys) {
-            ConfigurationSection spawnsection = (ConfigurationSection) s.get(key);
-
-            Location loc = new Location(
-                    Bukkit.getServer().getWorlds().get(0),
-                    spawnsection.getDouble("x"),
-                    spawnsection.getDouble("y"),
-                    spawnsection.getDouble("z"),
-                    (float) spawnsection.getDouble("yaw"),
-                    (float) spawnsection.getDouble("pitch")
-            );
-
-            List<String> addresses = spawnsection.getStringList("addresses");
-            for(String addr: addresses)
-                spawns.put(addr, loc);
-        }
-        return spawns;
     }
 }
